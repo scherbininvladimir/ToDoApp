@@ -14,13 +14,20 @@ def index(request):
     # for t in Tag.objects.all()}
 
     # 3rd version
-    from django.db.models import Count
+    # from django.db.models import Count
 
-    counts = Category.objects.annotate(total_tasks=Count(
-        'todoitem')).order_by("-total_tasks")
-    counts = {c.name: c.total_tasks for c in counts}
+    # counts = Category.objects.annotate(total_tasks=Count(
+    #     'todoitem')).order_by("-total_tasks")
+    # counts = {c.name: c.total_tasks for c in counts}
+    
+    # 4th version
+    categories = Category.objects.all()
+    category_counts = {c.name: c.todos_count for c in categories}
+    priorities = TodoItem.objects.filter(owner=request.user)
+    priority_counts = {p.get_priority_display(): p.priority_count for p in priorities}    
+    
+    return render(request, "tasks/index.html", {"category_counts": category_counts, "priorities": priority_counts })
 
-    return render(request, "tasks/index.html", {"counts": counts})
 
 
 def filter_tasks(tags_by_task):

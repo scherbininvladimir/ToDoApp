@@ -15,7 +15,6 @@ class Category(models.Model):
     def __str__(self):
         return f'{self.name} ({self.slug})'
 
-
 class TodoItem(models.Model):
     PRIORITY_HIGH = 1
     PRIORITY_MEDIUM = 2
@@ -38,6 +37,7 @@ class TodoItem(models.Model):
         "Приоритет", choices=PRIORITY_CHOICES, default=PRIORITY_MEDIUM
     )
     category = models.ManyToManyField(Category, blank=True)
+    priority_count = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.description.lower()
