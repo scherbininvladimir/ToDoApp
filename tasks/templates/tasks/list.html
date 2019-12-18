@@ -5,12 +5,12 @@
 
 {% block main_content %}
   <h1>Текущие задачи</h1>
-    <!-- <ul class="list-inline">
+    <ul class="list-inline">
     {% for cat in categories %}
       <li class="list-inline-item">
         <span class="badge badge-info">{{ cat.name }}</span>
       </li>
-    {% endfor %} -->
+    {% endfor %}
     </ul>
   <ul id="todo-list">
   {% for task in tasks %}
@@ -18,11 +18,11 @@
     <li class="completed">
       <input class='checkbox' data-uid={{ task.id }} type='checkbox' disabled='disabled' checked='checked'/>
     {% endif %}
-    {% if task.priority == task.PRIORITY_HIGH %}
+    {% if task.priority.priority == "Высокий приоритет" %}
       <span class="badge badge-pill badge-danger">&nbsp;</span>
-    {% elif task.priority == task.PRIORITY_MEDIUM %}
+    {% elif task.priority.priority == "Средний приоритет" %}
       <span class="badge badge-pill badge-secondary">&nbsp;</span>
-    {% elif task.priority == task.PRIORITY_LOW %}
+    {% elif task.priority.priority == "Низкий приортет" %}
       <span class="badge badge-pill badge-success">&nbsp;</span>
     {% endif %}
       <a href={% url "tasks:details" task.id %}>{{ task.description }}</a>

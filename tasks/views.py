@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404, render
 from django.views.generic import ListView
 from django.views.generic.detail import DetailView
-from tasks.models import TodoItem, Category
+from tasks.models import TodoItem, Category, PriorityCount
 
 
 def index(request):
@@ -23,8 +23,9 @@ def index(request):
     # 4th version
     categories = Category.objects.all()
     category_counts = {c.name: c.todos_count for c in categories}
-    priorities = TodoItem.objects.filter(owner=request.user)
-    priority_counts = {p.get_priority_display(): p.priority_count for p in priorities}    
+    
+    priorities = PriorityCount.objects.filter(owner=request.user)
+    priority_counts = {p.priority: p.priority_count for p in priorities}    
     
     return render(request, "tasks/index.html", {"category_counts": category_counts, "priorities": priority_counts })
 
