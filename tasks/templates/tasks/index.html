@@ -14,7 +14,9 @@
   </ul>
   <ul>
     {% for key, value in priorities.items %}
+      {% if value > 0 %}
       <li><span class="badge badge-warning">{{ key }}: {{ value }}</span></li>
+      {% endif %}
     {% endfor %}
   </ul>
 {% endblock %}

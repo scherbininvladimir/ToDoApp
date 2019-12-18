@@ -22,7 +22,7 @@
       <span class="badge badge-pill badge-danger">&nbsp;</span>
     {% elif task.priority.priority == "Средний приоритет" %}
       <span class="badge badge-pill badge-secondary">&nbsp;</span>
-    {% elif task.priority.priority == "Низкий приортет" %}
+    {% elif task.priority.priority == "Низкий приоритет" %}
       <span class="badge badge-pill badge-success">&nbsp;</span>
     {% endif %}
       <a href={% url "tasks:details" task.id %}>{{ task.description }}</a>

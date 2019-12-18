@@ -6,7 +6,7 @@ from django.urls import reverse
 class Category(models.Model):
     slug = models.CharField(max_length=128)
     name = models.CharField(max_length=256)
-    todos_count = models.PositiveIntegerField(default=0)
+    # todos_count = models.PositiveIntegerField(default=0)
 
     class Meta:
         verbose_name = 'Категория'
@@ -16,8 +16,18 @@ class Category(models.Model):
         return f'{self.name} ({self.slug})'
 
 
+class CategoryCount(models.Model):
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    category_count = models.PositiveIntegerField(default=0)
+
+
 class Priority(models.Model):
     priority = models.CharField(max_length=100)
+
+    class Meta:
+        verbose_name = 'Приоритет'
+        verbose_name_plural = 'Приоритеты'
 
     def __str__(self):
         return self.priority
@@ -56,3 +66,7 @@ class TodoItem(models.Model):
 
     def get_absolute_url(self):
         return reverse("tasks:details", args=[self.pk])
+
+    class Meta:
+        verbose_name = 'Задача'
+        verbose_name_plural = 'Задачи'

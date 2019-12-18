@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404, render
 from django.views.generic import ListView
 from django.views.generic.detail import DetailView
-from tasks.models import TodoItem, Category, PriorityCount
+from tasks.models import TodoItem, Category, PriorityCount, CategoryCount
 
 
 def index(request):
@@ -21,8 +21,8 @@ def index(request):
     # counts = {c.name: c.total_tasks for c in counts}
     
     # 4th version
-    categories = Category.objects.all()
-    category_counts = {c.name: c.todos_count for c in categories}
+    categories = CategoryCount.objects.filter(owner=request.user)
+    category_counts = {c.category: c.category_count for c in categories}
     
     priorities = PriorityCount.objects.filter(owner=request.user)
     priority_counts = {p.priority: p.priority_count for p in priorities}    
@@ -75,10 +75,11 @@ class TaskListView(ListView):
         for t in user_tasks:
             tags.append(list(t.category.all()))
 
-        categories = []
-        for cat in t.category.all():
-            if cat not in categories:
-                categories.append(cat)
+        # # categories = []
+        # for cat in t.category.all():
+        #     if cat not in categories:
+        #         categories.append(cat)
+        categories = [cat for cat in Category.objects.all()]
         context["categories"] = categories
 
         return context
