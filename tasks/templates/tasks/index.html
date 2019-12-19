@@ -7,7 +7,9 @@
   <h1>Категории и числа</h1>
   <ul>
   {% for cat, count in category_counts.items %}
+    {% if count > 0 %}
     <li><span class="badge badge-info">{{ cat }}: {{ count }}</span></li>
+    {% endif %}
   {% empty %}
     <li>Список задач по категориям пуст. Попробуйте добавить их из админки</li>
   {% endfor %}

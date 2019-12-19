@@ -21,6 +21,6 @@ class CategoryAdmin(admin.ModelAdmin):
 # class PriorityCountAdmin(admin.ModelAdmin):
 #     pass
 
-@admin.register(CategoryCount)
-class CategoryCountAdmin(admin.ModelAdmin):
-    pass
+# @admin.register(CategoryCount)
+# class CategoryCountAdmin(admin.ModelAdmin):
+#     list_display = ('category', 'owner', 'category_count')

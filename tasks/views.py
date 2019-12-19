@@ -21,13 +21,17 @@ def index(request):
     # counts = {c.name: c.total_tasks for c in counts}
     
     # 4th version
-    categories = CategoryCount.objects.filter(owner=request.user)
-    category_counts = {c.category: c.category_count for c in categories}
+    context = {}
+    if request.user.pk:
+        categories = CategoryCount.objects.filter(owner=request.user)
+        category_counts = {c.category: c.category_count for c in categories}
+        
+        priorities = PriorityCount.objects.filter(owner=request.user)
+        priority_counts = {p.priority: p.priority_count for p in priorities}    
+
+        context = {"category_counts": category_counts, "priorities": priority_counts}
     
-    priorities = PriorityCount.objects.filter(owner=request.user)
-    priority_counts = {p.priority: p.priority_count for p in priorities}    
-    
-    return render(request, "tasks/index.html", {"category_counts": category_counts, "priorities": priority_counts })
+    return render(request, "tasks/index.html", context)
 
 
 

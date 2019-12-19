@@ -12,7 +12,7 @@ def task_changed(sender, instance, created, **kwargs):
     for pr in PriorityCount.objects.all():
         pr_counter[pr.priority] = 0
 
-    for t in TodoItem.objects.all():
+    for t in TodoItem.objects.filter(owner=instance.owner):
         pr_counter[t.priority] +=1
     
     for pr, new_count in pr_counter.items():
@@ -32,15 +32,17 @@ def task_deleted(sender, instance, **kwargs):
 
     cat_counter = Counter()
     
-    for cat in CategoryCount.objects.filter(owner=instance.owner):
-        cat_counter[cat.category.slug] = 0
+    for cc in CategoryCount.objects.filter(owner=instance.owner):
+        cat = cc.category
+        cat_counter[cat.id] = 0
 
-    for t in TodoItem.objects.all():
+    for t in TodoItem.objects.filter(owner=instance.owner):
         for cat in t.category.all():
-            cat_counter[cat.slug] += 1
+            cat_counter[cat.id] += 1
 
-    for slug, new_count in cat_counter.items():
-        CategoryCount.objects.filter(owner=instance.owner).filter(slug=slug).update(todos_count=new_count)
+    for id, new_count in cat_counter.items():
+        cat = Category.objects.filter(id=id).first()
+        CategoryCount.objects.filter(owner=instance.owner).filter(category=cat).update(category_count=new_count)
 
 
 @receiver(m2m_changed, sender=TodoItem.category.through)
@@ -52,7 +54,7 @@ def task_cats_added(sender, instance, action, model, **kwargs):
         slug = cat.slug
 
         new_count = 0
-        for task in TodoItem.objects.all():
+        for task in TodoItem.objects.filter(owner=instance.owner):
             new_count += task.category.filter(slug=slug).count()
         
         cat_qs = CategoryCount.objects.filter(owner=instance.owner).filter(category=cat)
@@ -69,16 +71,17 @@ def task_cats_removed(sender, instance, action, model, pk_set, **kwargs):
 
     cat_counter = Counter()
 
-    for cat in CategoryCount.objects.filter(owner=instance.owner):
+    for cc in CategoryCount.objects.filter(owner=instance.owner):
+        cat = cc.category
         cat_counter[cat.id] = 0
 
-    for t in TodoItem.objects.all():
+    for t in TodoItem.objects.filter(owner=instance.owner):
         for cat in t.category.all():
             cat_counter[cat.id] += 1
 
     for id, new_count in cat_counter.items():
-        if id:
-            cat = Category.objects.get(id=id)
+        cat = Category.objects.filter(id=id).first()
+        if cat:
             cat_qs = CategoryCount.objects.filter(owner=instance.owner).filter(category=cat)
             if cat_qs.count():
                 cat_qs.update(category_count=new_count)
