@@ -2,6 +2,7 @@ from django.shortcuts import get_object_or_404, render
 from django.views.generic import ListView
 from django.views.generic.detail import DetailView
 from tasks.models import TodoItem, Category, PriorityCount, CategoryCount
+from django.http import HttpResponse
 
 
 def index(request):
@@ -92,3 +93,10 @@ class TaskListView(ListView):
 class TaskDetailsView(DetailView):
     model = TodoItem
     template_name = "tasks/details.html"
+
+
+def datetime(request):
+    import datetime
+    now = datetime.datetime.now()
+    return HttpResponse(now)
+
