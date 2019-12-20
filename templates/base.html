@@ -22,6 +22,7 @@
               <i class="fas fa-home"></i>&nbsp;<a href="/">На главную</a>
               <i class="fas fa-clipboard-list"></i>&nbsp;<a href="{% url "tasks:list" %}">задачи</a>
             {% endif %}
+            <hr>
             <p>Страница проверки кэширования</p>
             <i class="fas fa-clock"></i>&nbsp;<a href="/datetime">Memcached</a>
 	    <i class="fas fa-cog"></i>&nbsp;<a href='{% url 'admin:index' %}'>админка</a>
