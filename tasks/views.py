@@ -95,6 +95,7 @@ class TaskDetailsView(DetailView):
     template_name = "tasks/details.html"
 
 
+@cache_page(300)
 def datetime(request):
     import datetime
     now = datetime.datetime.now()
